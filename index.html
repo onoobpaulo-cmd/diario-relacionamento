@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Diário do Relacionamento ❤️</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:#f5f7fb;
+color:#222;
+padding-bottom:80px;
+}
+
+header{
+background:linear-gradient(135deg,#4f46e5,#2563eb);
+color:white;
+padding:25px;
+border-radius:0 0 25px 25px;
+box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+header h1{
+font-size:28px;
+}
+
+header p{
+opacity:.9;
+margin-top:5px;
+}
+
+.container{
+padding:15px;
+}
+
+.card{
+background:white;
+border-radius:18px;
+padding:18px;
+margin-bottom:15px;
+box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+.card h2{
+margin-bottom:15px;
+color:#2563eb;
+}
+
+.progress{
+height:18px;
+background:#ddd;
+border-radius:20px;
+overflow:hidden;
+margin-top:10px;
+}
+
+.progress-bar{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#4f46e5,#22c55e);
+transition:.4s;
+}
+
+.big-number{
+font-size:42px;
+font-weight:bold;
+text-align:center;
+color:#2563eb;
+margin:15px 0;
+}
+
+.item{
+margin:12px 0;
+}
+
+.item label{
+display:block;
+margin-bottom:5px;
+font-weight:bold;
+}
+
+select,input[type=text],input[type=date],textarea{
+
+width:100%;
+padding:12px;
+border-radius:10px;
+border:1px solid #ccc;
+font-size:15px;
+}
+
+textarea{
+min-height:90px;
+resize:vertical;
+}
+
+button{
+margin-top:10px;
+background:#2563eb;
+color:white;
+border:none;
+padding:12px;
+width:100%;
+border-radius:12px;
+font-size:16px;
+cursor:pointer;
+}
+
+button:hover{
+background:#1d4ed8;
+}
+
+.note{
+background:#eef5ff;
+padding:12px;
+border-radius:10px;
+margin-top:10px;
+white-space:pre-wrap;
+}
+
+footer{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:white;
+display:flex;
+justify-content:space-around;
+padding:10px;
+box-shadow:0 -2px 10px rgba(0,0,0,.1);
+}
+
+footer button{
+
+background:none;
+color:#2563eb;
+font-weight:bold;
+padding:5px;
+width:auto;
+}
+
+.section{
+display:none;
+}
+
+.section.active{
+display:block;
+}
+
+@media (prefers-color-scheme: dark){
+
+body{
+background:#111827;
+color:white;
+}
+
+.card{
+background:#1f2937;
+}
+
+select,input,textarea{
+background:#374151;
+color:white;
+border:none;
+}
+
+.note{
+background:#374151;
+}
+
+footer{
+background:#1f2937;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>❤️ Diário do Relacionamento</h1>
+
+<p>Acompanhe sua jornada antes do pedido de namoro.</p>
+
+</header>
+
+<div class="container">
+
+<!-- DASHBOARD -->
+
+<section id="inicio" class="section active">
+
+<div class="card">
+
+<h2>Prontidão</h2>
+
+<div class="big-number" id="percentual">0%</div>
+
+<div class="progress">
+
+<div class="progress-bar" id="barra"></div>
+
+</div>
+
+<p style="margin-top:15px;" id="mensagem">
+
+Comece respondendo ao checklist.
+
+</p>
+
+</div>
+
+</section>
+
+<!-- CHECKLIST -->
+
+<section id="checklist" class="section">
+
+<div class="card">
+
+<h2>Checklist</h2>
+
+<div id="listaChecklist"></div>
+
+</div>
+
+</section>
+
+<!-- DIÁRIO -->
+
+<section id="diario" class="section">
+
+<div class="card">
+
+<h2>Novo Encontro</h2>
+
+<div class="item">
+
+<label>Data</label>
+
+<input type="date" id="data">
+
+</div>
+
+<div class="item">
+
+<label>Local</label>
+
+<input type="text" id="local">
+
+</div>
+
+<div class="item">
+
+<label>Como foi?</label>
+
+<textarea id="descricao"></textarea>
+
+</div>
+
+<button onclick="salvarDiario()">
+
+Salvar
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>Histórico</h2>
+
+<div id="historico"></div>
+
+</div>
+
+</section>
+
+<!-- FLAGS -->
+
+<section id="flags" class="section">
+
+<div class="card">
+
+<h2>❤️ Green Flags</h2>
+
+<textarea id="green"></textarea>
+
+</div>
+
+<div class="card">
+
+<h2>🚩 Red Flags</h2>
+
+<textarea id="red"></textarea>
+
+</div>
+
+<div class="card">
+
+<h2>⭐ O que admiro nele</h2>
+
+<textarea id="admira"></textarea>
+
+</div>
+
+<button onclick="salvarNotas()">
+
+Salvar
+
+</button>
+
+</section>
+
+</div>
+
+<footer>
+
+<button onclick="mostrar('inicio')">
+
+🏠
+
+</button>
+
+<button onclick="mostrar('checklist')">
+
+✅
+
+</button>
+
+<button onclick="mostrar('diario')">
+
+📖
+
+</button>
+
+<button onclick="mostrar('flags')">
+
+❤️
+
+</button>
+
+</footer>
+
+<script>
+
+const perguntas=[
+
+"Eu gosto dele de verdade.",
+
+"Consigo ser eu mesmo perto dele.",
+
+"Confio nele.",
+
+"Ele respeita meu tempo.",
+
+"Conversamos bem.",
+
+"Resolvemos conflitos.",
+
+"Temos objetivos parecidos.",
+
+"Me sinto feliz quando estou com ele.",
+
+"Quero construir uma rotina juntos.",
+
+"Estou escolhendo namorar, e não apenas por medo de perder."
+
+];
+
+const lista=document.getElementById("listaChecklist");
+
+perguntas.forEach((p,i)=>{
+
+lista.innerHTML+=`
+
+<div class="item">
+
+<label>${p}</label>
+
+<select onchange="atualizar()"
+
+id="p${i}">
+
+<option value="0">❌ Ainda não</option>
+
+<option value="1">🤔 Parcialmente</option>
+
+<option value="2">✅ Sim</option>
+
+</select>
+
+</div>
+
+`;
+
+});
+
+function mostrar(id){
+
+document.querySelectorAll(".section")
+
+.forEach(s=>s.classList.remove("active"));
+
+document.getElementById(id)
+
+.classList.add("active");
+
+}
+
+function atualizar(){
+
+let total=0;
+
+let max=perguntas.length*2;
+
+for(let i=0;i<perguntas.length;i++){
+
+total+=parseInt(document.getElementById("p"+i).value);
+
+}
+
+let pct=Math.round(total/max*100);
+
+document.getElementById("percentual").innerHTML=pct+"%";
+
+document.getElementById("barra").style.width=pct+"%";
+
+let texto="";
+
+if(pct<40){
+
+texto="Ainda é cedo. Continue conhecendo melhor a relação.";
+
+}else if(pct<70){
+
+texto="Vocês parecem estar construindo uma boa base.";
+
+}else if(pct<90){
+
+texto="Há muitos sinais positivos.";
+
+}else{
+
+texto="Parece que vocês construíram uma relação bastante saudável.";
+
+}
+
+document.getElementById("mensagem").innerHTML=texto;
+
+localStorage.setItem("checklist",
+
+JSON.stringify(
+
+Array.from(document.querySelectorAll("select")).map(s=>s.value)
+
+));
+
+}
+
+function salvarDiario(){
+
+let lista=JSON.parse(localStorage.getItem("diario")||"[]");
+
+lista.unshift({
+
+data:data.value,
+
+local:local.value,
+
+texto:descricao.value
+
+});
+
+localStorage.setItem("diario",JSON.stringify(lista));
+
+carregarDiario();
+
+data.value="";
+
+local.value="";
+
+descricao.value="";
+
+}
+
+function carregarDiario(){
+
+let lista=JSON.parse(localStorage.getItem("diario")||"[]");
+
+historico.innerHTML="";
+
+lista.forEach(i=>{
+
+historico.innerHTML+=`
+
+<div class="note">
+
+<b>${i.data}</b>
+
+<br>
+
+📍 ${i.local}
+
+<br><br>
+
+${i.texto}
+
+</div>
+
+`;
+
+});
+
+}
+
+function salvarNotas(){
+
+localStorage.setItem("green",green.value);
+
+localStorage.setItem("red",red.value);
+
+localStorage.setItem("admira",admira.value);
+
+alert("Salvo!");
+
+}
+
+window.onload=()=>{
+
+let s=JSON.parse(localStorage.getItem("checklist")||"[]");
+
+s.forEach((v,i)=>{
+
+document.getElementById("p"+i).value=v;
+
+});
+
+green.value=localStorage.getItem("green")||"";
+
+red.value=localStorage.getItem("red")||"";
+
+admira.value=localStorage.getItem("admira")||"";
+
+carregarDiario();
+
+atualizar();
+
+};
+
+</script>
+
+</body>
+</html>
